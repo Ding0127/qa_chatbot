@@ -1,0 +1,136 @@
+body.dark { filter: none !important; }
+
+body {
+    background: linear-gradient(135deg, 
+        #ff9a9e 0%, 
+        #fad0c4 20%, 
+        #fff8dc 40%, 
+        #a1c4fd 60%, 
+        #c2e9fb 80%, 
+        #ffecd2 100%) !important;
+    font-family: 'Comic Sans MS', 'Marker Felt', 'Chalkboard', sans-serif !important;
+}
+
+.gradio-container {
+    background: linear-gradient(135deg, 
+        #ff9a9e 0%, 
+        #fad0c4 20%, 
+        #fff8dc 40%, 
+        #a1c4fd 60%, 
+        #c2e9fb 80%, 
+        #ffecd2 100%) !important;
+    font-family: 'Comic Sans MS', 'Marker Felt', 'Chalkboard', sans-serif !important;
+}
+
+.gradio-container {
+    padding-left:17vw;
+    padding-right:17vw;
+}
+
+.gr-blocks {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 50px !important;
+    padding: 30px !important;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.1),
+        inset 0 0 15px rgba(255, 255, 255, 0.8);
+    border: 3px dashed #ff9a9e !important;
+    animation: float 6s ease-in-out infinite;
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: right bottom;
+}
+
+.gr-blocks div {
+    background: none;
+}
+
+.gr-row div {
+    background: none;
+}
+
+.gr-button {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4) !important;
+    color: #000 !important;
+    border: 3px solid #ff6b6b !important;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 50px !important;
+    padding: 10px 25px !important;
+    box-shadow: 0 5px 0 #ff6b6b;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    font-family: 'Comic Sans MS', cursive;
+}
+
+.gr-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 0 #ff6b6b;
+}
+
+.gr-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 0 #ff6b6b;
+}
+
+.gr-textbox, .gr-textbox input, .gr-textbox textarea {
+    border: 3px solid #ff9a9e !important;
+    font-size: 18px !important;
+    border-radius: 20px !important;
+    padding: 15px !important;
+    background-color: #fff8dc !important;
+    box-shadow: inset 0 0 10px rgba(255, 154, 158, 0.3);
+    font-family: 'Comic Sans MS', cursive;
+}
+
+/* 标题样式 */
+.gr-markdown h1 {
+    color: #ff6b6b !important;
+    text-align: center !important;
+    font-size: 32px !important;
+    text-shadow: 3px 3px 0 #ffd700;
+    margin-bottom: 10px !important;
+    font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive;
+}
+
+/* 副标题样式 */
+.gr-markdown p {
+    color: #5f6caf !important;
+    text-align: center !important;
+    font-size: 20px !important;
+    margin-top: 0 !important;
+    font-weight: bold;
+}
+
+/* 标签样式 */
+.gr-textbox label span {
+    font-family: 'Comic Sans MS', cursive !important;
+    color: #ff6b6b !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    margin-bottom: 10px !important;
+}
+
+/* 浮动动画 */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* 添加一些装饰元素 */
+.decoration {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    opacity: 0.6;
+    z-index: -1;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .gr-blocks {
+        padding: 20px !important;
+        border-radius: 30px !important;
+    }
+}

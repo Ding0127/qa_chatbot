@@ -1,3 +1,5 @@
+# coding=utf-8
+
 import os
 import json
 import time
@@ -198,7 +200,7 @@ def create_vector_database(processed_data_path=None, documents=None, test_mode=F
 
 if __name__ == "__main__":
     processed_data_path = "processed_data/processed_documents.json"
-    
+    os.environ['DASHSCOPE_API_KEY'] = "sk-e3e79f4c089f4442a87facc3910f2e7c"
     # 设置为 False 以处理所有文档
     test_mode = False
     create_vector_database(processed_data_path=processed_data_path, test_mode=test_mode)

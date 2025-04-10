@@ -1,0 +1,21 @@
+body {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    font-family: 'Comic Sans MS', sans-serif;
+}
+.gr-button {
+    background-color: #ffd700 !important;
+    color: #000 !important;
+    border: 2px solid #ffa500 !important;
+    font-weight: bold;
+    font-size: 16px;
+}
+.gr-textbox {
+    border: 2px solid #ffa500 !important;
+    font-size: 16px;
+}
+.gr-blocks {
+    background-color: #fff8dc;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
