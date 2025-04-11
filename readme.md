@@ -70,6 +70,11 @@ This script creates a vector database from the preprocessed documents using Chro
    python create_vectordb.py
    ```
 
+4. Run RAG UI and service:
+   ```bash
+   python app.py
+   ```
+
 The resulting vector database can be used for semantic search and retrieval of educational content based on user queries, enabling a RAG system that provides age-appropriate educational answers.
 
 
