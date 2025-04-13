@@ -1,16 +1,64 @@
 import gradio as gr
+import csv
+import os
+import sqlite3
 from rag_service import RagService
 
 # init
 rag_service = RagService()
-# rag_service = None
 
-# Mock user list and group assignment
-user_list = {
-    "kid123": "Kindergarten",
-    "p1_456": "Primary 1-3",
-    "p4_789": "Primary 4-6",
-}
+# Path configurations
+USER_CSV_PATH = "data/users.csv"
+DB_PATH = "data/conversation_logs.db"
+
+# Ensure directories exist
+os.makedirs(os.path.dirname(USER_CSV_PATH), exist_ok=True)
+os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+
+def load_users_from_csv():
+    """Load user list from CSV file. Create if not exists."""
+    user_list = {}
+    
+    # Create default CSV if it doesn't exist
+    if not os.path.exists(USER_CSV_PATH):
+        with open(USER_CSV_PATH, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['user_id', 'group'])
+            # Add default users
+            writer.writerow(['kid123', 'Kindergarten'])
+            writer.writerow(['p1_456', 'Primary 1-3'])
+            writer.writerow(['p4_789', 'Primary 4-6'])
+    
+    # Read from CSV
+    with open(USER_CSV_PATH, 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)  # Skip header
+        for row in reader:
+            if len(row) >= 2:
+                user_list[row[0]] = row[1]
+    
+    return user_list
+
+# Initialize database
+def init_database():
+    """Initialize SQLite database for conversation logs."""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS conversation_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT,
+        question TEXT,
+        answer TEXT,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+    conn.commit()
+    conn.close()
+
+# Load user list and initialize database
+user_list = load_users_from_csv()
+init_database()
 
 # Mock question database
 question_database = {
@@ -26,58 +74,56 @@ question_database = {
     },
 }
 
-# Create a conversation log
-conversation_logs = {}
+def get_user_conversation_logs(user_id):
+    """Retrieve conversation logs for a specific user from database."""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT question, answer FROM conversation_logs WHERE user_id = ? ORDER BY timestamp",
+        (user_id,)
+    )
+    logs = [{"question": q, "answer": a} for q, a in cursor.fetchall()]
+    conn.close()
+    return logs
 
+def save_conversation(user_id, question, answer):
+    """Save conversation to database."""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO conversation_logs (user_id, question, answer) VALUES (?, ?, ?)",
+        (user_id, question, answer)
+    )
+    conn.commit()
+    conn.close()
 
 def login(user_id):
     """Handle user login."""
     if user_id in user_list:
         group = user_list[user_id]
-        if user_id not in conversation_logs:
-            conversation_logs[user_id] = []  # Initialize user log
         return f"Login successful! You are in group: {group}", group
     else:
         return "Login failed: User ID not found.", None
-
 
 def ask_question(user_id, group, question):
     """Handle questions and return answers."""
     if not group or user_id not in user_list:
         return "Please log in first.", None
 
-    # Retrieve answer based on question and user group
-    # answer = question_database.get(question, {}).get(
-    #     group, "Sorry, I couldn't find an answer to your question."
-    # )
-    # answer = rag_service.rag(group, question)
-
-    # # Save to log
-    # if user_id in conversation_logs:
-    #     conversation_logs[user_id].append({"question": question, "answer": answer})
-
-    # # Format the log for display
-    # formatted_log = "\n".join(
-    #     [f"Q: {entry['question']} -> A: {entry['answer']}" for entry in conversation_logs[user_id]]
-    # )
-
-    # return answer, formatted_log
-
     response = ""
     for response in rag_service.rag(group, question):
         yield response, " "
 
-    # Save to log
-    if user_id in conversation_logs:
-        conversation_logs[user_id].append({"question": question, "answer": response})
+    # Save to database
+    save_conversation(user_id, question, response)
 
-    # Format the log for display
+    # Get logs from database and format for display
+    logs = get_user_conversation_logs(user_id)
     formatted_log = "\n".join(
-        [f"Q: {entry['question']} -> A: {entry['answer']}" for entry in conversation_logs[user_id]]
+        [f"Q: {entry['question']} -> A: {entry['answer']}" for entry in logs]
     )
 
     yield response, formatted_log
-
 
 def main():
     # Gradio interface with custom styling
@@ -147,39 +193,6 @@ def main():
                 value="Your questions and answers will appear here as you explore!",
                 elem_classes="gr-textbox"
             )
-
-            # liwe = gr.Interface(
-            #     fn=(lambda question: ask_question(user_id_input, group_output, question)),
-            #     inputs=[
-            #         gr.Textbox(
-            #             label="What's Your Question?",
-            #             placeholder="e.g., How do birds fly?",
-            #             lines=2,
-            #             elem_classes="gr-textbox"
-            #         )
-            #     ],
-            #     outputs=[
-            #         gr.Textbox(
-            #             label="✨ Answer ✨",
-            #             interactive=False,
-            #             value="Your answer will appear here like magic!",
-            #             lines=3,
-            #             elem_classes="gr-textbox"
-            #         ),
-            #         gr.Textbox(
-            #             label="📜 Your Conversation Log 📜",
-            #             interactive=False,
-            #             lines=5,
-            #             value="Your questions and answers will appear here as you explore!",
-            #             elem_classes="gr-textbox"
-            #         )
-            #     ],
-            #     # live=True,
-            #     flagging_mode="never",
-            #     submit_btn=gr.Button("🔮 Submit Question", elem_classes="gr-button"),
-            #     clear_btn=None,
-                
-            # )
 
         # 事件处理
         login_button.click(

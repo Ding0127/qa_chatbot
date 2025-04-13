@@ -13,7 +13,7 @@ def get_answers_gpt(context, temperature=0.7):
     # This is just for demonstration purposes
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer sk-IZzwETIh5A86cd5eb20BT3BLbKFJ90F932c37d96407bA5E7"
+        "Authorization": "Bearer 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"
     }
     
     if isinstance(context, list):
@@ -73,7 +73,7 @@ def stream_response(context: str, temperature: float = 0.7) -> Iterator[str]:
     
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer sk-IZzwETIh5A86cd5eb20BT3BLbKFJ90F932c37d96407bA5E7"
+        "Authorization": "Bearer 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"
     }
     
     data = {
