@@ -120,7 +120,7 @@ def ask_question(user_id, group, question):
     # Get logs from database and format for display
     logs = get_user_conversation_logs(user_id)
     formatted_log = "\n".join(
-        [f"Q: {entry['question']} -> A: {entry['answer']}" for entry in logs]
+        [f"{index}.Q: {entry['question']} -> A: {entry['answer']}" for index, entry in enumerate(logs)]
     )
 
     yield response, formatted_log
@@ -172,7 +172,7 @@ def main():
             with gr.Row():
                 question_input = gr.Textbox(
                     label="What's Your Question?",
-                    placeholder="e.g., How do birds fly?",
+                    placeholder="e.g., What is computer?",
                     lines=2,
                     elem_classes="gr-textbox"
                 )

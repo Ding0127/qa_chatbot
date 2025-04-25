@@ -8,7 +8,7 @@ User's age: {age_group}
 Context: {context}
 Question: {query}
 
-Provide your best answer for this user's comprehension level:
+Provide your best answer for this user's comprehension level, no more than 50 words:
 """
 
 

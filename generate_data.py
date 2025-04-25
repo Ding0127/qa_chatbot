@@ -73,7 +73,7 @@ def stream_response(context: str, temperature: float = 0.7) -> Iterator[str]:
     
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer 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"
+        "Authorization": "Bearer sk-KnPAWETP978fcCb3394BT3BlBKFJ477BC305062f4Fa4a538"
     }
     
     data = {
